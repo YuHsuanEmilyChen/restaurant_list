@@ -4,7 +4,7 @@ Users can search the information of their preferred restaurant by the restaurant
 ## Features
 * Provide search function by restaurant title or catagories.
 * Show notification when there is no matched result to the searched keyword.
-* Embed medals showing the detailed information of each restaurant including address linked with Google Map, contact number, category and rating.
+* Embed modals showing the detailed information of each restaurant including address linked with Google Map, contact number, category and rating.
 
 ## Installation
 1. Open terminal, and copy this project to local server.
