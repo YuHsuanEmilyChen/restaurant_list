@@ -27,9 +27,17 @@ app.set('view engine', 'handlebars')
 app.use(express.static('public'))
 
 // Set routes
+// CRUD - Read
 app.get('/', (req, res) => {
-  res.render('index', { diners: restaurantList.results })
+  Restaurant.find()
+    .lean()
+    .then(diners => res.render('index', { diners }))
+    .catch(error => console.log('error'))
 })
+// app.get('/', (req, res) => {
+//   res.render('index', { diners: restaurantList.results })
+// })
+
 
 app.get('/restaurants/:diner_id', (req, res) => {
   const diner = restaurantList.results.find(diner => diner.id.toString() === req.params.diner_id)
