@@ -4,6 +4,7 @@ const app = express()
 const port = 3000
 const exphbs = require('express-handlebars')
 // const restaurantList = require('./restaurant.json')
+// const Swal = require('sweetalert2')
 
 // 載入model
 const Restaurant = require('./models/restaurant')
@@ -19,8 +20,29 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
+// Create a custom helper
+const hbs = exphbs.create({
+  defaultLayout: 'main',
+  helpers: {
+    searchAlert: function (keyword) {
+      return `<script> Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '${keyword}',
+        confirmButtonText:'OK'
+      })</script>`
+    },
+    sayHi: function (keyword) {
+      return "<h1>" + keyword + "</h1>"
+    }
+  }
+})
+
 // Set template engine
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
+app.engine('handlebars', hbs.engine)
+// app.engine('handlebars', exphbs({
+//   defaultLayout: 'main',
+// }))
 app.set('view engine', 'handlebars')
 
 // Set static files
@@ -59,7 +81,7 @@ app.get('/search', (req, res) => {
     .lean()
     .then(diners => {
       const filtered_diner = diners.filter(diner => {
-        diner.name.toLowerCase().includes(keyword.toLowerCase()) || diner.category.includes(keyword)
+        return diner.name.toLowerCase().includes(keyword.toLowerCase()) || diner.category.includes(keyword)
       })
       res.render('index', { diners: filtered_diner, keyword })
     })
